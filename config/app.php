@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Shivella\Bitly\BitlyServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -226,6 +227,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        'Bitly' => Shivella\Bitly\Facade\Bitly::class,
     ],
 
 ];
