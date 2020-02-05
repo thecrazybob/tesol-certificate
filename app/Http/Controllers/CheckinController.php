@@ -15,15 +15,12 @@ class CheckinController extends Controller
         $raw_json_data = $request->get('data');
         $raw_json_data = '
         {
-    "name": "John Doe",
-    "email": "john@doe.com"
-}';
+            "name": "John Doe",
+            "email": "john@doe.com"
+        }';
+
         $encrypted_json_data = Crypt::encrypt($raw_json_data);
 
-        // Dummy Data for Testing purposes
-        // $data['name'] = 'John Doe';
-        // $data['email'] = 'john@doe.com';
-        
         // Route URL
         $basicUrl = route('checkin');
 
@@ -71,19 +68,18 @@ class CheckinController extends Controller
         $data = json_decode($decrypted_json_data, true);
 
         
+        $duplicates = DB::table('checked_in')
+                ->where('email', '=', $data['email'])
+                ->where('name', 'like', $data['name'])
+                ->get();
 
-$duplicates = DB::table('checked_in')
-        ->where('email', '=', $data['email'])
-        ->where('name', 'like', $data['name'])
-        ->get();
-
-        if ($duplicates->isEmpty()) {
-            DB::table('checked_in')->insert(
-    [
-        'name' => $data['name'],
-        'email' => $data['email'],
-    ]
-);
+                if ($duplicates->isEmpty()) {
+                    DB::table('checked_in')->insert(
+            [
+                'name' => $data['name'],
+                'email' => $data['email'],
+            ]
+        );
 
         }
         return $duplicates;
