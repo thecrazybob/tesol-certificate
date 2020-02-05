@@ -9,7 +9,7 @@ use setasign\Fpdi\Fpdi;
 class CertificateController extends Controller
 {
     public function generate(Request $request) {
-        define('FPDF_FONTPATH', 'storage/fonts');
+        define('FPDF_FONTPATH', 'fonts');
 
         $name = $request->get('name');
         $name_length = strlen($name);
@@ -17,11 +17,11 @@ class CertificateController extends Controller
         $pdf = new Fpdi('l');
 
         if ($request->get('type') == "blank") {
-            $pagecount = $pdf->setSourceFile('storage/cert-blank.pdf');
+            $pagecount = $pdf->setSourceFile('pdf/cert-blank.pdf');
         }
         else {
             // Reference the PDF you want to use (use relative path)
-            $pagecount = $pdf->setSourceFile('storage/cert-format.pdf');
+            $pagecount = $pdf->setSourceFile('pdf/cert-format.pdf');
         }
 
         // Import the first page from the PDF and add to dynamic PDF
