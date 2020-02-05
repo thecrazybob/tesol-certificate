@@ -13,11 +13,6 @@ class CheckinController extends Controller
 {
     public function qrcode(Request $request) {
         $raw_json_data = $request->get('data');
-        $raw_json_data = '
-        {
-            "name": "John Doe",
-            "email": "john@doe.com"
-        }';
 
         $encrypted_json_data = Crypt::encrypt($raw_json_data);
 
@@ -38,10 +33,9 @@ class CheckinController extends Controller
          */
         $qr_link = '/qr/' . Str::random(6) . '.png';
         $response = QrCode::format('png')->size(300)->margin(0)->generate($url, '../public/' . $qr_link);
+        $qr_link = url($qr_link);
 
-        // return url($qr_link);
-        return $url;
-        // return $response;
+        return $qr_link;
         
     }
 
@@ -73,22 +67,17 @@ class CheckinController extends Controller
                 ->where('name', 'like', $data['name'])
                 ->get();
 
-                if ($duplicates->isEmpty()) {
-                    DB::table('checked_in')->insert(
+        if ($duplicates->isEmpty()) {
+            DB::table('checked_in')->insert(
             [
                 'name' => $data['name'],
                 'email' => $data['email'],
             ]
-        );
-
+            );
         }
-        return $duplicates;
 
-        // Return Data
-        return $data['name'] . ' ' . $data['email'];
-        
-        
-
+        return redirect()->route('generate-pdf', ['name' => $data['name']]);
 
     }
+
 }
