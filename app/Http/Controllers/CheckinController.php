@@ -32,7 +32,16 @@ class CheckinController extends Controller
          * Generate QR Code
          */
         $qr_link = 'qr/' . Str::random(6) . '.png';
-        $response = QrCode::format('png')->size(300)->margin(1)->generate($url, '../storage/app/public/' . $qr_link);
+        
+        if (App::environment('local')) {
+           $path_to_qr = '../storage/app/public/';
+        }
+
+        else {
+            $path_to_qr = 'storage/app/public/';
+        }
+
+        $response = QrCode::format('png')->size(300)->margin(1)->generate($url, $path_to_qr . $qr_link);
         $qr_link = url($qr_link);
 
         return $qr_link;
