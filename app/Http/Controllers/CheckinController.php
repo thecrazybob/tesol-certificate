@@ -31,8 +31,8 @@ class CheckinController extends Controller
         /**
          * Generate QR Code
          */
-        $qr_link = '/qr/' . Str::random(6) . '.png';
-        $response = QrCode::format('png')->size(300)->margin(0)->generate(url($url, $qr_link));
+        $qr_link = 'qr/' . Str::random(6) . '.png';
+        $response = QrCode::format('png')->size(300)->margin(0)->generate($url, '../storage/app/public/' . $qr_link);
         $qr_link = url($qr_link);
 
         return $qr_link;
@@ -54,6 +54,11 @@ class CheckinController extends Controller
         
         // Get Encrypted Data from Request
         $encrypted_json_data = $request->get('data');
+
+        if(empty($data['name'])) {
+            return "Name cannot be empty";
+            die();
+        }
 
         // Decrypted the data
         $decrypted_json_data = Crypt::decrypt($encrypted_json_data);
