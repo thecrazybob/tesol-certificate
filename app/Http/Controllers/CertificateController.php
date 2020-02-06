@@ -9,7 +9,17 @@ use setasign\Fpdi\Fpdi;
 class CertificateController extends Controller
 {
     public function generate(Request $request) {
-        define('FPDF_FONTPATH', 'fonts');
+
+        if (\App::environment('local')) {
+            $blank_pdf_path = 'pdf/cert-blank.pdf';
+            $default_pdf_path = 'pdf/cert-format.pdf';
+            define('FPDF_FONTPATH', 'fonts');
+        }
+        else {
+            $blank_pdf_path = 'public/pdf/cert-blank.pdf';
+            $default_pdf_path = 'public/pdf/cert-format.pdf';
+            define('FPDF_FONTPATH', 'public/fonts');
+        }
 
         $name = $request->get('name');
         $name_length = strlen($name);
@@ -19,18 +29,14 @@ class CertificateController extends Controller
 
         if ($request->get('type') == "blank") {
             
-            !\App::environment('local') ? $pdf_path = 'public/pdf/cert-blank.pdf' : $pdf_path = 'pdf/cert-blank.pdf';
-
-            $pagecount = $pdf->setSourceFile($pdf_path);
+            $pagecount = $pdf->setSourceFile($blank_pdf_path);
 
         }
 
         else {
             
-            !\App::environment('local') ? $pdf_path = 'public/pdf/cert-format.pdf' : $pdf_path = 'pdf/cert-format.pdf';
-
             // Reference the PDF you want to use (use relative path)
-            $pagecount = $pdf->setSourceFile($pdf_path);
+            $pagecount = $pdf->setSourceFile($default_pdf_path);
         
         }
 
