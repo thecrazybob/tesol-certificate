@@ -26,7 +26,9 @@ class CertificateController extends Controller
         }
 
         else {
-        
+            
+            !\App::environment('local') ? $pdf_path = 'public/pdf/cert-format.pdf' : $pdf_path = 'pdf/cert-format.pdf';
+
             // Reference the PDF you want to use (use relative path)
             $pagecount = $pdf->setSourceFile('pdf/cert-format.pdf');
         
