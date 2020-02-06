@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\DB;
 class CheckinController extends Controller
 {
     public function qrcode(Request $request) {
-        $raw_json_data = $request->get('data');
+        $raw_json_data = json_encode(array(
+            'name'  => $request->get('name'),
+            'email' =>$request->get('email')   
+        ));
 
         $encrypted_json_data = Crypt::encrypt($raw_json_data);
 
