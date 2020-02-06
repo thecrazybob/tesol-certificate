@@ -13,15 +13,23 @@ class CertificateController extends Controller
 
         $name = $request->get('name');
         $name_length = strlen($name);
+
         // Create new Landscape PDF
         $pdf = new Fpdi('l');
 
         if ($request->get('type') == "blank") {
-            $pagecount = $pdf->setSourceFile('pdf/cert-blank.pdf');
+            
+            !\App::environment('local') ? $pdf_path = 'public/pdf/cert-blank.pdf' : $pdf_path = 'pdf/cert-blank.pdf';
+
+            $pagecount = $pdf->setSourceFile($pdf_path);
+
         }
+
         else {
+        
             // Reference the PDF you want to use (use relative path)
             $pagecount = $pdf->setSourceFile('pdf/cert-format.pdf');
+        
         }
 
         // Import the first page from the PDF and add to dynamic PDF
