@@ -17,6 +17,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('generate-qr', 'CheckinController@qrcode');
+Route::post('generate-qr', 'CheckinController@qrcode');
 
-Route::get('generate-pdf', 'CertificateController@generate')->name('generate-pdf');
+Route::post('generate-pdf', 'CertificateController@generate')->name('generate-pdf');
